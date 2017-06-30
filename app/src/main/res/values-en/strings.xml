@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="menu_news">News</string>
+    <string name="menu_team">Team</string>
+    <string name="menu_contact">Contact Information</string>
+    <string name="menu_about_us">About Us</string>
+    <string name="menu_bus_connections">Bus Connections</string>
+    <string name="menu_google_maps">Google Maps</string>
+
+    <string name="employee">Employee</string>
+    <string name="export_to_calendar">Export as Contact</string>
+    <string name="export_unsuccessful">Could not export contact</string>
+
+    <string name="phone">Phone number</string>
+    <string name="fax">Fax number</string>
+    <string name="email">E-Mail address</string>
+    <string name="url">URL</string>
+    <string name="location">Address</string>
+    <string name="copy">Copy</string>
+    <string name="message">Message</string>
+
+</resources>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/ll_"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:context="com.example.pc3.hausrafael.MainActivity">
+
+            <TextView
+                android:id="@+id/tv_menu_news"
+                android:text="@string/menu_news"
+                android:drawableStart="@drawable/ic_news"
+                style="@style/menu_style" />
+
+            <TextView
+                android:id="@+id/tv_menu_team"
+                android:text="@string/menu_team"
+                android:drawableStart="@drawable/ic_team"
+                style="@style/menu_style" />
+
+            <TextView
+                android:id="@+id/tv_menu_contact"
+                android:text="@string/menu_contact"
+                android:drawableStart="@drawable/ic_contact"
+                style="@style/menu_style" />
+
+            <TextView
+                android:id="@+id/tv_menu_about_us"
+                android:text="@string/menu_about_us"
+                android:drawableStart="@drawable/ic_home"
+                style="@style/menu_style" />
+
+            <TextView
+                android:id="@+id/tv_menu_bus_connections"
+                style="@style/menu_style"
+                android:drawableStart="@drawable/ic_bus"
+                android:text="@string/menu_bus_connections" />
+
+            <TextView
+                android:id="@+id/tv_menu_google_maps"
+                style="@style/menu_style"
+                android:drawableStart="@drawable/ic_map"
+                android:text="@string/menu_google_maps" />
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <TextView
+        android:id="@+id/tv_team_member_name"
+        style="@style/menu_style"
+        android:drawableStart="@drawable/ic_placeholder_face"
+        tools:text="Lalu" />
+</layout>

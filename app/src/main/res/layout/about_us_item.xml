@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="32dp">
+    <TextView
+        android:id="@+id/tv_about_us_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Haus Rafael"
+        android:textSize="28sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="16dp" />
+    <TextView
+        android:id="@+id/tv_about_us_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="fill_horizontal"
+        tools:text='Die Übergangseinrichtung Haus Rafael ist ein gemeindenahes Angebot der Rehabilitation.\nIn einem ganzheitlichen Programm werden Leistungen der medizinisch-beruflichen und sozialen Rehabilitation erbracht. Die einzelnen Maßnahmen sind aufeinander abgestimmt und wirken zusammen, um eine Stabilisierung des Gesundheitszustandes zu erreichen sowie die Teilhabe am gesellschaftlichen und beruflichen Leben zu ermöglichen.\n\nRehabilitationsprogramm:\nDen Rahmen für das gesamte Reha-Programm bildet das therapeutische Milieu der Einrichtung. Es ist gekennzeichnet durch die überschaubare Größe, eine familienähnliche moderne Wohnatmosphäre sowie ein klar strukturiertes und gruppenbezogenes Lernfeld.\nIm Mittelpunkt der Reha-Maßnahme steht das Ziel der Befähigung zu einer weitgehend selbständigen Lebensführung. Deshalb ist das Zusammenleben im "Haus Rafael" von größtmöglicher Alltagsnähe und durch das Prinzip der Eigenverantwortung geprägt. Die genzheitliche individuelle Betreuung wird durch das Bezugstherapeutensystem gewährleistet.'
+        app:layout_constraintTop_toBottomOf="@+id/tv_about_us_heading"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="-16dp"
+        android:padding="16dp" />
+</android.support.constraint.ConstraintLayout>

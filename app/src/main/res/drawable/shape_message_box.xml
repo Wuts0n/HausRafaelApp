@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners
+        android:radius="@dimen/message_shape_border_radius"
+        android:bottomLeftRadius="0dp" />
+    <padding
+        android:left="@dimen/message_shape_padding"
+        android:top="@dimen/message_shape_padding"
+        android:right="@dimen/message_shape_padding"
+        android:bottom="@dimen/message_shape_padding" />
+    <solid android:color="@color/colorMessageBox" />
+</shape>

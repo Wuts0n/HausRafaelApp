@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="menu_text_size">28sp</dimen>
+    <dimen name="menu_padding_vertical">8dp</dimen>
+    <dimen name="menu_padding_horizontal">16dp</dimen>
+    <dimen name="menu_padding_drawable">@dimen/menu_padding_horizontal</dimen>
+
+    <dimen name="news_padding_drawable">8dp</dimen>
+    <dimen name="contact_text_size">24sp</dimen>
+
+    <dimen name="message_shape_padding">5dp</dimen>
+    <dimen name="message_shape_border_radius">20dp</dimen>
+</resources>
