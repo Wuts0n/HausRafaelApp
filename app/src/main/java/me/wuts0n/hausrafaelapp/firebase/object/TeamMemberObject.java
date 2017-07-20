@@ -42,7 +42,7 @@ public class TeamMemberObject {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description = description.replaceAll("\\\\n", "\n");
     }
 
     public String getPicture() {

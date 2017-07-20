@@ -45,7 +45,7 @@ public class ContactObject {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description = description.replaceAll("\\\\n", "\n");
     }
 
     public String getLocation() {
@@ -53,7 +53,7 @@ public class ContactObject {
     }
 
     public void setLocation(String location) {
-        this.location = location;
+        this.location = location.replaceAll("\\\\n", "\n");
     }
 
     public String getPhone() {

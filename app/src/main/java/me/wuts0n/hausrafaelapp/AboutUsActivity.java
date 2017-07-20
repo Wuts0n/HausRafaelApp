@@ -67,7 +67,6 @@ public class AboutUsActivity extends NavigateUpActivity {
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     String key = dataSnapshot.getKey();
                     AboutUsObject entry = dataSnapshot.getValue(AboutUsObject.class);
-                    entry.setText(entry.getText().replaceAll("\\\\n", "\n"));
                     mEntries.put(key, entry);
                     update();
                     mProgressBar.setVisibility(View.INVISIBLE);
@@ -77,7 +76,6 @@ public class AboutUsActivity extends NavigateUpActivity {
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                     String key = dataSnapshot.getKey();
                     AboutUsObject entry = dataSnapshot.getValue(AboutUsObject.class);
-                    entry.setText(entry.getText().replaceAll("\\\\n", "\n"));
                     mEntries.put(key, entry);
                     update();
                 }

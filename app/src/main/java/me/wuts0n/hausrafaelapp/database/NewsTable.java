@@ -79,7 +79,7 @@ public class NewsTable implements BaseColumns {
                           int severity) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_KEY, key.toString());
-        values.put(COLUMN_TEXT, text.toString());
+        values.put(COLUMN_TEXT, (text != null ? text.toString() : ""));
         values.put(COLUMN_SEVERITY, severity);
         return mWritableDatabase.insert(NEWS_TABLE_NAME, null, values);
     }
@@ -89,7 +89,7 @@ public class NewsTable implements BaseColumns {
                           int severity) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_KEY, key.toString());
-        values.put(COLUMN_TEXT, text.toString());
+        values.put(COLUMN_TEXT, (text != null ? text.toString() : ""));
         values.put(COLUMN_SEVERITY, severity);
         return mWritableDatabase.update(NEWS_TABLE_NAME,
                 values,

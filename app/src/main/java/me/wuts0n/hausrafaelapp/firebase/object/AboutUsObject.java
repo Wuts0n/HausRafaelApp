@@ -20,7 +20,7 @@ public class AboutUsObject {
     }
 
     public void setHeading(String heading) {
-        this.heading = heading;
+        this.heading = heading.replaceAll("\\\\n", "\n");
     }
 
     public String getText() {
@@ -28,7 +28,7 @@ public class AboutUsObject {
     }
 
     public void setText(String text) {
-        this.text = text;
+        this.text = text.replaceAll("\\\\n", "\n");
     }
 
 }

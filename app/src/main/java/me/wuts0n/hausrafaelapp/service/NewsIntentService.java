@@ -68,7 +68,6 @@ public class NewsIntentService extends Service {
                     String key = dataSnapshot.getKey();
                     NewsObject entry = dataSnapshot.getValue(NewsObject.class);
                     if (entry != null && !(mNewsTable.existsRow(key))) {
-                        entry.setText(entry.getText().replaceAll("\\\\n", "\n"));
                         insertSQLiteRow(key, entry.getText(), entry.getSeverity());
                         createNotification(entry, mNewsTable.getID(key));
                     }
@@ -79,7 +78,6 @@ public class NewsIntentService extends Service {
                     String key = dataSnapshot.getKey();
                     NewsObject entry = dataSnapshot.getValue(NewsObject.class);
                     if (entry != null) {
-                        entry.setText(entry.getText().replaceAll("\\\\n", "\n"));
                         updateSQLiteRow(key, entry.getText(), entry.getSeverity());
                         createNotification(entry, mNewsTable.getID(key));
                     }

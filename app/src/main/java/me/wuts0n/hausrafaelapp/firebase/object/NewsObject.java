@@ -52,6 +52,6 @@ public class NewsObject {
     }
 
     public void setText(String text) {
-        this.text = text;
+        this.text = text.replaceAll("\\\\n", "\n");
     }
 }
