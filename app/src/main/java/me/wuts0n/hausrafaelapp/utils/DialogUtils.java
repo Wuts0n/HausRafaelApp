@@ -6,6 +6,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
+import android.widget.Toast;
 
 import me.wuts0n.hausrafaelapp.R;
 
@@ -25,6 +26,9 @@ public class DialogUtils {
                                         context.getSystemService(Context.CLIPBOARD_SERVICE);
                                 clipboard.setPrimaryClip(
                                         ClipData.newPlainText(title, text.toString()));
+                                Toast.makeText(context,
+                                        R.string.copy_successful,
+                                        Toast.LENGTH_SHORT).show();
                                 break;
                         }
                     }

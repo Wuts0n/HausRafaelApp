@@ -2,82 +2,98 @@
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <ScrollView
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
+
+        <ScrollView
             android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                tools:context="com.example.pc3.hausrafael.ContactActivity">
+
+                <ImageView
+                    android:id="@+id/iv_picture"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:background="@color/colorPrimaryLight"
+                    android:maxHeight="300dp"
+                    android:maxWidth="300dp"
+                    android:paddingTop="16dp"
+                    tools:ignore="ContentDescription"
+                    tools:src="@mipmap/ic_milka_lalu" />
+
+                <TextView
+                    android:id="@+id/tv_contact_heading"
+                    style="@style/team_member_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimaryLight"
+                    android:paddingBottom="16dp"
+                    android:paddingEnd="8dp"
+                    android:paddingStart="8dp"
+                    android:textAlignment="center"
+                    tools:text='Caritas regio gGmbH "Haus Raffaela"' />
+
+                <TextView
+                    android:id="@+id/tv_contact_location"
+                    style="@style/clickable_item_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_location"
+                    android:textSize="@dimen/contact_text_size"
+                    tools:text='Hammerbacherstr. 9a, 91058 Erlangen' />
+
+                <TextView
+                    android:id="@+id/tv_contact_phone"
+                    style="@style/clickable_item_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_phone"
+                    tools:text='09131 120880' />
+
+                <TextView
+                    android:id="@+id/tv_contact_fax"
+                    style="@style/clickable_item_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_fax"
+                    tools:text='09131 120881' />
+
+                <TextView
+                    android:id="@+id/tv_contact_email"
+                    style="@style/clickable_item_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_email"
+                    android:textSize="@dimen/contact_text_size"
+                    tools:text='hr@caritas-erlangen.de' />
+
+                <TextView
+                    android:id="@+id/tv_contact_internet"
+                    style="@style/clickable_item_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_internet"
+                    android:textSize="@dimen/contact_text_size"
+                    tools:text='https://caritas-erlangen.de/index.php/de/hilfe-bei-psychischer-erkrankung/uebergangseinrichtung-haus-rafael/' />
+
+            </LinearLayout>
+        </ScrollView>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            tools:context="com.example.pc3.hausrafael.ContactActivity">
-
-            <ImageView
-                android:id="@+id/iv_picture"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:paddingTop="16dp"
-                android:background="@color/colorPrimaryLight"
-                android:maxHeight="300dp"
-                android:maxWidth="300dp"
-                android:layout_gravity="center"
-                tools:src="@mipmap/ic_milka_lalu"
-                tools:ignore="ContentDescription" />
-
-            <TextView
-                android:id="@+id/tv_contact_heading"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="16dp"
-                android:paddingEnd="8dp"
-                android:paddingStart="8dp"
-                android:textAlignment="center"
-                android:background="@color/colorPrimaryLight"
-                style="@style/team_member_name"
-                tools:text='Caritas regio gGmbH "Haus Raffaela"' />
-
-            <TextView
-                android:id="@+id/tv_contact_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/clickable_item_style"
-                android:textSize="@dimen/contact_text_size"
-                android:drawableStart="@drawable/ic_location"
-                tools:text='Hammerbacherstr. 9a, 91058 Erlangen' />
-
-            <TextView
-                android:id="@+id/tv_contact_phone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/clickable_item_style"
-                android:drawableStart="@drawable/ic_phone"
-                tools:text='09131 120880' />
-
-            <TextView
-                android:id="@+id/tv_contact_fax"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/clickable_item_style"
-                android:drawableStart="@drawable/ic_fax"
-                tools:text='09131 120881' />
-
-            <TextView
-                android:id="@+id/tv_contact_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/clickable_item_style"
-                android:textSize="@dimen/contact_text_size"
-                android:drawableStart="@drawable/ic_email"
-                tools:text='hr@caritas-erlangen.de' />
-
-            <TextView
-                android:id="@+id/tv_contact_internet"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/clickable_item_style"
-                android:textSize="@dimen/contact_text_size"
-                android:drawableStart="@drawable/ic_internet"
-                tools:text='https://caritas-erlangen.de/index.php/de/hilfe-bei-psychischer-erkrankung/uebergangseinrichtung-haus-rafael/' />
-
-        </LinearLayout>
-    </ScrollView>
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:visibility="invisible" />
+    </RelativeLayout>
 </layout>

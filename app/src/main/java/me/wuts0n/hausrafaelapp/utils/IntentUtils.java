@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import me.wuts0n.hausrafaelapp.AboutUsActivity;
 import me.wuts0n.hausrafaelapp.ContactActivity;
@@ -69,7 +68,6 @@ public class IntentUtils {
                 .appendPath("")             // /
                 .appendQueryParameter(/* ? */"dm", /* = */ "de%3A09562%3A3472")
                 .build();
-        Log.wtf(IntentUtils.class.getName(), uri.toString());
         return new Intent(Intent.ACTION_VIEW, uri);
     }
 

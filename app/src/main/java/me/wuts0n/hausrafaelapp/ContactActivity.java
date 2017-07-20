@@ -1,21 +1,30 @@
 package me.wuts0n.hausrafaelapp;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
-import me.wuts0n.hausrafaelapp.database.DBContactEntry;
-import me.wuts0n.hausrafaelapp.database.DBHelper;
+import com.bumptech.glide.Glide;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import me.wuts0n.hausrafaelapp.databinding.ActivityContactBinding;
+import me.wuts0n.hausrafaelapp.firebase.object.ContactObject;
 import me.wuts0n.hausrafaelapp.listener.ContactClickListener;
-import me.wuts0n.hausrafaelapp.utils.BitmapUtils;
 import me.wuts0n.hausrafaelapp.utils.UriUtils;
 
 public class ContactActivity extends NavigateUpActivity {
 
     private ActivityContactBinding mBinding;
-    private Cursor mCursor;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mDatabaseReference;
+    private ChildEventListener mChildEventListener;
+    private ContactObject lastChanged;
 
 
     @Override
@@ -25,28 +34,13 @@ public class ContactActivity extends NavigateUpActivity {
 
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_contact);
 
-        DBHelper dbhelper = new DBHelper(this);
-        SQLiteDatabase db = dbhelper.getReadableDatabase();
-        mCursor = db.query(DBContactEntry.TABLE_NAME,
-                null, null, null, null, null, DBContactEntry._ID);
-        mCursor.moveToFirst();
+        if (mBinding.tvContactHeading.getText().toString().isEmpty()) {
+            mBinding.progressBar.setVisibility(View.VISIBLE);
+        }
 
-        mBinding.ivPicture.setImageBitmap(BitmapUtils.getBitMapFromByteArray(
-                mCursor.getBlob(mCursor.getColumnIndex(DBContactEntry.COLUMN_PICTURE))));
-        mBinding.tvContactHeading.setText(mCursor.getString(
-                mCursor.getColumnIndex(DBContactEntry.COLUMN_DESCRIPTION)));
-        mBinding.tvContactLocation.setText(mCursor.getString(
-                mCursor.getColumnIndex(DBContactEntry.COLUMN_LOCATION)).replaceAll("[,;] ", ",\n"));
-        mBinding.tvContactPhone.setText(mCursor.getString(
-                mCursor.getColumnIndex(DBContactEntry.COLUMN_PHONE)));
-        mBinding.tvContactFax.setText(mCursor.getString(
-                mCursor.getColumnIndex(DBContactEntry.COLUMN_FAX)));
-        mBinding.tvContactEmail.setText(mCursor.getString(
-                mCursor.getColumnIndex(DBContactEntry.COLUMN_EMAIL)));
-        String url = mCursor.getString(mCursor.getColumnIndex(DBContactEntry.COLUMN_WEBSITE))
-                .trim();
-        mBinding.tvContactInternet.setContentDescription(url);
-        mBinding.tvContactInternet.setText(UriUtils.getAuthority(url));
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mDatabaseReference = mFirebaseDatabase.getReference().child("contact");
+        attachDatabaseReadListener();
 
         ContactClickListener listener = new ContactClickListener(this, mBinding);
 
@@ -58,8 +52,59 @@ public class ContactActivity extends NavigateUpActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        mCursor.close();
-        super.onDestroy();
+    protected void onResume() {
+        super.onResume();
+        if (lastChanged != null) {
+            setContent(lastChanged);
+        }
+    }
+
+    private void attachDatabaseReadListener() {
+        if (mChildEventListener == null) {
+            mChildEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    ContactObject entry = dataSnapshot.getValue(ContactObject.class);
+                    setContent(entry);
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    ContactObject entry = dataSnapshot.getValue(ContactObject.class);
+                    setContent(entry);
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.wtf("DatabaseError", databaseError.toString());
+                }
+            };
+            mDatabaseReference.addChildEventListener(mChildEventListener);
+        }
+    }
+
+    private void setContent(ContactObject entry) {
+        lastChanged = entry;
+        if (!this.isDestroyed()) {
+            mBinding.tvContactHeading.setText(entry.getDescription());
+            mBinding.tvContactLocation.setText(entry.getLocation().replaceAll("[,;] ", ",\n"));
+            mBinding.tvContactPhone.setText(entry.getPhone());
+            mBinding.tvContactFax.setText(entry.getFax());
+            mBinding.tvContactEmail.setText(entry.getEmail());
+            String url = entry.getWebsite().trim();
+            mBinding.tvContactInternet.setContentDescription(url);
+            mBinding.tvContactInternet.setText(UriUtils.getAuthority(url));
+            ImageView ivPicture = mBinding.ivPicture;
+            Glide.with(ivPicture.getContext()).load(entry.getPicture()).into(ivPicture);
+        }
+        mBinding.progressBar.setVisibility(View.INVISIBLE);
     }
 }

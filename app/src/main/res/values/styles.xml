@@ -28,6 +28,7 @@
 
     <style name="menu_style" parent="clickable_item_style">
         <item name="android:drawableEnd">@drawable/ic_navigate_next</item>
+        <item name="android:layout_gravity">center</item>
     </style>
 
     <style name="contact_style" parent="clickable_item_style">
@@ -40,6 +41,17 @@
         <item name="android:textColor">@color/colorWhite</item>
     </style>
 
+    <style name="team_list_face">
+        <item name="android:layout_width">96dp</item>
+        <item name="android:minWidth">96dp</item>
+        <item name="android:layout_height">96dp</item>
+        <item name="android:minHeight">96dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
+
     <style name="news_message_box_style">
         <item name="android:background">@drawable/news_selector</item>
         <item name="android:layout_width">wrap_content</item>
@@ -47,7 +59,7 @@
         <item name="android:layout_marginBottom">8dp</item>
         <item name="android:layout_marginTop">8dp</item>
         <item name="android:layout_marginStart">16dp</item>
-        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
     </style>
 
     <style name="news_message_style">

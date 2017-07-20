@@ -9,4 +9,5 @@
     <color name="colorLightGrey">#FFDDDDDD</color>
 
     <color name="colorMessageBox">@color/colorPrimaryLight</color>
+    <color name="colorMessageBoxSelected">@color/colorPrimaryDark</color>
 </resources>

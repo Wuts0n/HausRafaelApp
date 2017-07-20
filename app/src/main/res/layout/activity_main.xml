@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:id="@+id/ll_"
             android:layout_width="match_parent"
@@ -16,27 +16,27 @@
 
             <TextView
                 android:id="@+id/tv_menu_news"
-                android:text="@string/menu_news"
+                style="@style/menu_style"
                 android:drawableStart="@drawable/ic_news"
-                style="@style/menu_style" />
+                android:text="@string/menu_news" />
 
             <TextView
                 android:id="@+id/tv_menu_team"
-                android:text="@string/menu_team"
+                style="@style/menu_style"
                 android:drawableStart="@drawable/ic_team"
-                style="@style/menu_style" />
+                android:text="@string/menu_team" />
 
             <TextView
                 android:id="@+id/tv_menu_contact"
-                android:text="@string/menu_contact"
+                style="@style/menu_style"
                 android:drawableStart="@drawable/ic_contact"
-                style="@style/menu_style" />
+                android:text="@string/menu_contact" />
 
             <TextView
                 android:id="@+id/tv_menu_about_us"
-                android:text="@string/menu_about_us"
+                style="@style/menu_style"
                 android:drawableStart="@drawable/ic_home"
-                style="@style/menu_style" />
+                android:text="@string/menu_about_us" />
 
             <TextView
                 android:id="@+id/tv_menu_bus_connections"
@@ -51,5 +51,7 @@
                 android:text="@string/menu_google_maps" />
 
         </LinearLayout>
+
     </ScrollView>
+
 </layout>

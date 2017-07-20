@@ -1,11 +1,13 @@
 package me.wuts0n.hausrafaelapp;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import me.wuts0n.hausrafaelapp.databinding.ActivityMainBinding;
 import me.wuts0n.hausrafaelapp.listener.MainActivityClickListener;
+import me.wuts0n.hausrafaelapp.service.NewsIntentService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,12 +28,7 @@ public class MainActivity extends AppCompatActivity {
         mBinding.tvMenuBusConnections.setOnClickListener(listener);
         mBinding.tvMenuGoogleMaps.setOnClickListener(listener);
 
-        // filling database with dummy data
-        /*me.wuts0n.hausrafaelapp.database.DBHelper dbhelper =
-                new me.wuts0n.hausrafaelapp.database.DBHelper(this);
-        android.database.sqlite.SQLiteDatabase writableDB = dbhelper.getWritableDatabase();
-        new me.wuts0n.hausrafaelapp.testing.DummyData(this, writableDB);*/
-
+        Intent intent = new Intent(this, NewsIntentService.class);
+        startService(intent);
     }
-
 }

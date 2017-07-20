@@ -3,6 +3,8 @@ package me.wuts0n.hausrafaelapp;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
@@ -10,22 +12,39 @@ import android.provider.ContactsContract.CommonDataKinds.Photo;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.Intents.Insert;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import me.wuts0n.hausrafaelapp.database.DBMemberEntry;
+import com.bumptech.glide.Glide;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+
+import me.wuts0n.hausrafaelapp.adapter.TeamListActivityAdapter.TeamListContract;
 import me.wuts0n.hausrafaelapp.databinding.ActivityTeamMemberBinding;
+import me.wuts0n.hausrafaelapp.firebase.object.TeamMemberObject;
 import me.wuts0n.hausrafaelapp.listener.TeamMemberClickListener;
-import me.wuts0n.hausrafaelapp.utils.BitmapUtils;
 import me.wuts0n.hausrafaelapp.utils.IntentUtils;
 
-import java.util.ArrayList;
 
 public class TeamMemberActivity extends NavigateUpActivity {
 
     private ActivityTeamMemberBinding mBinding;
+    private TeamMemberClickListener mClickListener;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mDatabaseReference;
+    private ChildEventListener mChildEventListener;
+    private String mKey;
+    private TeamMemberObject lastChanged;
 
 
     @Override
@@ -33,27 +52,23 @@ public class TeamMemberActivity extends NavigateUpActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team_member);
 
-        Intent intent = getIntent();
-        String name = intent.getStringExtra(DBMemberEntry.COLUMN_NAME);
-        String description = intent.getStringExtra(DBMemberEntry.COLUMN_DESCRIPTION);
-        byte[] image = intent.getByteArrayExtra(DBMemberEntry.COLUMN_PICTURE);
-        String phone = intent.getStringExtra(DBMemberEntry.COLUMN_PHONE);
-        String fax = intent.getStringExtra(DBMemberEntry.COLUMN_FAX);
-        String email = intent.getStringExtra(DBMemberEntry.COLUMN_EMAIL);
-
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_team_member);
-        TeamMemberClickListener listener = new TeamMemberClickListener(this, mBinding);
+        mClickListener = new TeamMemberClickListener(this, mBinding);
 
-        mBinding.primaryInfo.tvName.setText(name);
-        mBinding.primaryInfo.tvDescription.setText(description);
-        mBinding.primaryInfo.ivFace.setImageBitmap(BitmapUtils.getBitMapFromByteArray(image));
-        mBinding.primaryInfo.ivFace.setContentDescription(name);
-        mBinding.secondaryInfo.tvPhone.setText(phone);
-        mBinding.secondaryInfo.tvPhone.setOnClickListener(listener);
-        mBinding.secondaryInfo.tvFax.setText(fax);
-        mBinding.secondaryInfo.tvFax.setOnClickListener(listener);
-        mBinding.secondaryInfo.tvEmail.setText(email);
-        mBinding.secondaryInfo.tvEmail.setOnClickListener(listener);
+        Intent intent = getIntent();
+        mKey = intent.getStringExtra(TeamListContract.KEY);
+
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mDatabaseReference = mFirebaseDatabase.getReference().child("team_member");
+        attachDatabaseReadListener();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (lastChanged != null) {
+            setContent(lastChanged);
+        }
     }
 
     @Override
@@ -83,8 +98,12 @@ public class TeamMemberActivity extends NavigateUpActivity {
                 ArrayList<ContentValues> list = new ArrayList<>();
                 ContentValues values = new ContentValues();
                 values.put(Data.MIMETYPE, Photo.CONTENT_ITEM_TYPE);
-                values.put(Photo.PHOTO,
-                        getIntent().getByteArrayExtra(DBMemberEntry.COLUMN_PICTURE));
+                ImageView imageView = mBinding.primaryInfo.ivFace;
+                Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] imageInByte = baos.toByteArray();
+                values.put(Photo.PHOTO, imageInByte);
                 list.add(values);
                 intent.putExtra(Insert.DATA, list);
 
@@ -100,5 +119,86 @@ public class TeamMemberActivity extends NavigateUpActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void attachDatabaseReadListener() {
+        if (mChildEventListener == null) {
+            mChildEventListener = new ChildEventListener() {
+
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    String key = dataSnapshot.getKey();
+                    TeamMemberObject entry = dataSnapshot.getValue(TeamMemberObject.class);
+                    if (entry != null && mKey.equals(key)) {
+                        entry.setName(key);
+                        setContent(entry);
+                    }
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    String key = dataSnapshot.getKey();
+                    TeamMemberObject entry = dataSnapshot.getValue(TeamMemberObject.class);
+                    if (entry != null && mKey.equals(key)) {
+                        entry.setName(key);
+                        setContent(entry);
+                    }
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    String key = dataSnapshot.getKey();
+                    TeamMemberObject entry = dataSnapshot.getValue(TeamMemberObject.class);
+                    if (entry != null && mKey.equals(key)) {
+                        entry.setName(key);
+                        setContent(entry);
+                    }
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.wtf("DatabaseError", databaseError.toString());
+                }
+            };
+            mDatabaseReference.addChildEventListener(mChildEventListener);
+        }
+    }
+
+    private void setContent(TeamMemberObject obj) {
+        lastChanged = obj;
+        if (!this.isDestroyed()) {
+            String name = obj.getName();
+            String description = obj.getDescription();
+            String phone = obj.getPhone();
+            String fax = obj.getFax();
+            String email = obj.getEmail();
+            mBinding.primaryInfo.tvName.setText(name);
+            mBinding.primaryInfo.tvDescription.setText(description == null ? "" : description);
+            ImageView ivFace = mBinding.primaryInfo.ivFace;
+            Glide.with(ivFace.getContext()).load(obj.getPicture()).asBitmap().into(ivFace);
+            mBinding.primaryInfo.ivFace.setContentDescription(name);
+            if (phone != null) {
+                mBinding.secondaryInfo.tvPhone.setText(phone);
+                mBinding.secondaryInfo.tvPhone.setOnClickListener(mClickListener);
+            } else {
+                mBinding.secondaryInfo.tvPhone.setOnClickListener(null);
+            }
+            if (fax != null) {
+                mBinding.secondaryInfo.tvFax.setText(fax);
+                mBinding.secondaryInfo.tvFax.setOnClickListener(mClickListener);
+            } else {
+                mBinding.secondaryInfo.tvFax.setOnClickListener(null);
+            }
+            if (email != null) {
+                mBinding.secondaryInfo.tvEmail.setText(email);
+                mBinding.secondaryInfo.tvEmail.setOnClickListener(mClickListener);
+            } else {
+                mBinding.secondaryInfo.tvEmail.setOnClickListener(null);
+            }
+        }
     }
 }

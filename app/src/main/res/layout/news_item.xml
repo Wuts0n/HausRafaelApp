@@ -3,30 +3,30 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/cl_news_message_box"
-        style="@style/news_message_box_style"
-        android:background="@drawable/shape_message_box">
+        style="@style/news_message_box_style">
 
         <TextView
             android:id="@+id/tv_news_message"
             style="@style/news_message_style"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginTop="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:drawableStart="@drawable/ic_news_info"
 
-            tools:text="Die Caritec wurde niedergebrannt. Deshalb fällt AT heute aus."
-            tools:drawableStart="@drawable/ic_news_info" />
+            tools:text="Die Caritec wurde niedergebrannt. Deshalb fällt AT heute aus." />
 
         <TextView
             android:id="@+id/tv_news_date"
             style="@style/news_date_style"
-            app:layout_constraintTop_toBottomOf="@+id/tv_news_message"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="16dp"
             android:layout_marginBottom="2dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_news_message"
 
             tools:text="22.06.2017" />
 

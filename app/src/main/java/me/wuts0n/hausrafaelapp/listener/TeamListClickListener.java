@@ -1,29 +1,27 @@
 package me.wuts0n.hausrafaelapp.listener;
 
 
+import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.TextView;
 
+import me.wuts0n.hausrafaelapp.R;
 import me.wuts0n.hausrafaelapp.adapter.TeamListActivityAdapter.TeamListAdapterViewHolder;
-import me.wuts0n.hausrafaelapp.database.DBMemberEntry;
+import me.wuts0n.hausrafaelapp.adapter.TeamListActivityAdapter.TeamListContract;
 import me.wuts0n.hausrafaelapp.utils.IntentUtils;
 import me.wuts0n.hausrafaelapp.utils.NavigationUtils;
 
 public class TeamListClickListener implements View.OnClickListener {
 
-    private final AppCompatActivity mActivity;
+    private final Activity mActivity;
     private final TeamListAdapterViewHolder mHolder;
-    private final Cursor mCursor;
 
 
-    public TeamListClickListener(AppCompatActivity activity,
-                                 TeamListAdapterViewHolder holder,
-                                 Cursor cursor) {
+    public TeamListClickListener(Activity activity, TeamListAdapterViewHolder holder) {
         mActivity = activity;
         mHolder = holder;
-        mCursor = cursor;
     }
 
 
@@ -34,21 +32,10 @@ public class TeamListClickListener implements View.OnClickListener {
      */
     @Override
     public void onClick(View v) {
-        mCursor.moveToPosition(mHolder.getAdapterPosition());
         Intent intent = IntentUtils.getTeamMemberActivityIntent(mActivity);
-        intent.putExtra(DBMemberEntry.COLUMN_NAME,
-                mCursor.getString(mCursor.getColumnIndex(DBMemberEntry.COLUMN_NAME)));
-        intent.putExtra(DBMemberEntry.COLUMN_DESCRIPTION,
-                mCursor.getString(mCursor.getColumnIndex(DBMemberEntry.COLUMN_DESCRIPTION)));
-        intent.putExtra(DBMemberEntry.COLUMN_PICTURE,
-                mCursor.getBlob(mCursor.getColumnIndex(DBMemberEntry.COLUMN_PICTURE)));
-        intent.putExtra(DBMemberEntry.COLUMN_PHONE,
-                mCursor.getString(mCursor.getColumnIndex(DBMemberEntry.COLUMN_PHONE)));
-        intent.putExtra(DBMemberEntry.COLUMN_FAX,
-                mCursor.getString(mCursor.getColumnIndex(DBMemberEntry.COLUMN_FAX)));
-        intent.putExtra(DBMemberEntry.COLUMN_EMAIL,
-                mCursor.getString(mCursor.getColumnIndex(DBMemberEntry.COLUMN_EMAIL)));
+        intent.putExtra(TeamListContract.KEY,
+                ((TextView) mHolder.itemView.findViewById(R.id.tv_team_member_name)).getText());
         mActivity.startActivity(intent);
-        NavigationUtils.setNavigateNextTransition(mActivity);
+        NavigationUtils.setNavigateNextTransition((AppCompatActivity) mActivity);
     }
 }

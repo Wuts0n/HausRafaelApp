@@ -1,8 +1,7 @@
 package me.wuts0n.hausrafaelapp.adapter;
 
-import android.database.Cursor;
+import android.app.Activity;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,19 +9,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import me.wuts0n.hausrafaelapp.R;
-import me.wuts0n.hausrafaelapp.database.DBAboutUsEntry;
+import me.wuts0n.hausrafaelapp.firebase.object.AboutUsObject;
 
 
-public class AboutUsActivityAdapter extends DatabaseAdapter {
+public class AboutUsActivityAdapter extends FirebaseDatabaseAdapter {
 
 
-    public AboutUsActivityAdapter(@NonNull AppCompatActivity activity, Cursor cursor) {
-        super(activity, cursor);
+    public AboutUsActivityAdapter(@NonNull Activity activity, Object[] entries) {
+        super(activity, entries);
     }
 
 
     @Override
-    public AboutUsActivityAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(mActivity)
                 .inflate(R.layout.about_us_item, viewGroup, false);
         view.setFocusable(true);
@@ -32,12 +31,11 @@ public class AboutUsActivityAdapter extends DatabaseAdapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         AboutUsActivityAdapterViewHolder thisHolder = (AboutUsActivityAdapterViewHolder) holder;
-        mCursor.moveToPosition(position);
 
-        String heading = mCursor.getString(mCursor.getColumnIndex(DBAboutUsEntry.COLUMN_HEADING));
-        thisHolder.headingView.setText(heading);
-        String text = mCursor.getString(mCursor.getColumnIndex(DBAboutUsEntry.COLUMN_TEXT));
-        thisHolder.textView.setText(text);
+        AboutUsObject obj = (AboutUsObject) mEntries[position];
+
+        thisHolder.headingView.setText(obj.getHeading());
+        thisHolder.textView.setText(obj.getText());
     }
 
 

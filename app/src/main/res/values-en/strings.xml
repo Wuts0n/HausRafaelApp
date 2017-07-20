@@ -11,6 +11,8 @@
     <string name="employee">Employee</string>
     <string name="export_to_calendar">Export as Contact</string>
     <string name="export_unsuccessful">Could not export contact</string>
+    <string name="copy_successful">Copied to clipboard</string>
+    <string name="recieved">Recieved</string>
 
     <string name="phone">Phone number</string>
     <string name="fax">Fax number</string>

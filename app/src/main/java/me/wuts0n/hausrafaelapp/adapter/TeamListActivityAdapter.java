@@ -1,27 +1,27 @@
 package me.wuts0n.hausrafaelapp.adapter;
 
-import android.database.Cursor;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import me.wuts0n.hausrafaelapp.R;
-import me.wuts0n.hausrafaelapp.database.DBMemberEntry;
+import me.wuts0n.hausrafaelapp.firebase.object.TeamMemberObject;
 import me.wuts0n.hausrafaelapp.listener.TeamListClickListener;
 
 
-public class TeamListActivityAdapter extends DatabaseAdapter {
+public class TeamListActivityAdapter extends FirebaseDatabaseAdapter {
 
-
-    public TeamListActivityAdapter(@NonNull AppCompatActivity activity, Cursor cursor) {
-        super(activity, cursor);
+    public TeamListActivityAdapter(@NonNull AppCompatActivity activity, Object[] entries) {
+        super(activity, entries);
     }
-
 
     @Override
     public TeamListAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
@@ -34,40 +34,42 @@ public class TeamListActivityAdapter extends DatabaseAdapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         TeamListAdapterViewHolder thisHolder = (TeamListAdapterViewHolder) holder;
-        mCursor.moveToPosition(position);
+        TeamMemberObject obj = (TeamMemberObject) mEntries[position];
 
-        String name = mCursor.getString(mCursor.getColumnIndex(DBMemberEntry.COLUMN_NAME));
-        thisHolder.memberView.setText(name);
-        thisHolder.memberView.setContentDescription(name);
-        byte[] image = mCursor.getBlob(mCursor.getColumnIndex(DBMemberEntry.COLUMN_PICTURE));
-        if (image != null) {
-            if (Build.VERSION.SDK_INT >= 21) {
-                thisHolder.memberView.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                        mActivity.getDrawable(R.mipmap.ic_milka_lalu),                      // start
-                        null,
-                        mActivity.getDrawable(R.drawable.ic_navigate_next),                 // end
-                        null);
-            } else {
-                thisHolder.memberView.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                        mActivity.getResources().getDrawable(R.mipmap.ic_milka_lalu),       // start
-                        null,
-                        mActivity.getResources().getDrawable(R.drawable.ic_navigate_next),  // end
-                        null);
-            }
-        }
+        LinearLayout linearLayout = thisHolder.linearLayout;
+        linearLayout.setContentDescription(obj.getName());
+
+        TextView textView = thisHolder.textView;
+        textView.setText(obj.getName());
+
+        ImageView imageView = thisHolder.imageView;
+        Glide.with(imageView.getContext())
+                .load(obj.getPicture())
+                .asBitmap()
+                .placeholder(R.drawable.ic_placeholder_face)
+                .into(imageView);
+    }
+
+
+    public static class TeamListContract {
+        public static String KEY = "THISISAKEY";
     }
 
 
     public class TeamListAdapterViewHolder extends RecyclerView.ViewHolder {
 
-        final TextView memberView;
+        final LinearLayout linearLayout;
+        final TextView textView;
+        final ImageView imageView;
 
         TeamListAdapterViewHolder(View view) {
             super(view);
 
-            memberView = (TextView) view.findViewById(R.id.tv_team_member_name);
+            linearLayout = (LinearLayout) view.findViewById(R.id.ll_team_list);
+            textView = (TextView) view.findViewById(R.id.tv_team_member_name);
+            imageView = (ImageView) view.findViewById(R.id.iv_list_face);
 
-            view.setOnClickListener(new TeamListClickListener(mActivity, this, mCursor));
+            view.setOnClickListener(new TeamListClickListener(mActivity, this));
         }
     }
 }

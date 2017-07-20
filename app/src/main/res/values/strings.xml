@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
-    <string name="company">Haus Rafael</string>
-    <string name="app_name">@string/company</string>
+
+    <string name="app_name">Haus Rafael</string>
 
     <string name="menu_news">Neuigkeiten</string>
     <string name="menu_team">Team</string>
@@ -14,7 +13,10 @@
     <string name="employee">Mitarbeiter</string>
     <string name="export_to_calendar">Als Kontakt exportieren</string>
     <string name="export_unsuccessful">Kontakt konnte nicht exportiert werden</string>
+    <string name="copy_successful">Text wurde in die Zwischenablage kopiert</string>
+    <string name="recieved">Empfangen</string>
 
+    <string name="company">Haus Rafael</string>
     <string name="phone">Telefonnummer</string>
     <string name="fax">Faxnummer</string>
     <string name="email">E-Mail Adresse</string>

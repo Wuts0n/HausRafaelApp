@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <TextView
-        android:id="@+id/tv_team_member_name"
-        style="@style/menu_style"
-        android:drawableStart="@drawable/ic_placeholder_face"
-        tools:text="Lalu" />
+
+    <LinearLayout
+        android:id="@+id/ll_team_list"
+        style="@style/onclick_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_list_face"
+            style="@style/team_list_face"
+            android:src="@drawable/ic_placeholder_face" />
+
+        <TextView
+            android:id="@+id/tv_team_member_name"
+            style="@style/menu_style"
+            tools:text="Lalu" />
+    </LinearLayout>
 </layout>

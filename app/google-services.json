@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "697487895092",
+    "firebase_url": "https://haus-rafael-app.firebaseio.com",
+    "project_id": "haus-rafael-app",
+    "storage_bucket": "haus-rafael-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:697487895092:android:142e3bfd1a852aa0",
+        "android_client_info": {
+          "package_name": "me.wuts0n.hausrafaelapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "697487895092-ldmgg2d5tjot9qhu7q9hjpau43uj38m6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpCZqBPOLkRXsIp5q_pxlyhRKan0Z7d4w"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
