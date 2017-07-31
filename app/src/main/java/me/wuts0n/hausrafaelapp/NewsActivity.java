@@ -50,8 +50,8 @@ public class NewsActivity extends NavigateUpActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         mDatabaseReference = FirebaseReference.getDatabaseReference().child("news");
         attachDatabaseReadListener();
     }

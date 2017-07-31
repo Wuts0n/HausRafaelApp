@@ -17,8 +17,8 @@ abstract public class NavigateUpActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
         mDatabaseReference.removeEventListener(mChildEventListener);
         mDatabaseReference = null;
         mChildEventListener = null;

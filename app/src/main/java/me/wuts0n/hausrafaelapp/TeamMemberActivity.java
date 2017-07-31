@@ -56,8 +56,8 @@ public class TeamMemberActivity extends NavigateUpActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         mDatabaseReference = FirebaseReference.getDatabaseReference().child("team_member");
         attachDatabaseReadListener();
     }

@@ -52,8 +52,8 @@ public class ContactActivity extends NavigateUpActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         mDatabaseReference = FirebaseReference.getDatabaseReference().child("contact");
         attachDatabaseReadListener();
     }
