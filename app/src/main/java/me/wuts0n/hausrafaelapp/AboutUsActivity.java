@@ -13,6 +13,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -103,7 +104,9 @@ public class AboutUsActivity extends NavigateUpActivity {
     }
 
     private void update() {
-        mAdapter.swapArray(transformMapToArray(mEntries));
+        Object[] array = transformMapToArray(mEntries);
+        Arrays.sort(array);
+        mAdapter.swapArray(array);
     }
 
     @NonNull
