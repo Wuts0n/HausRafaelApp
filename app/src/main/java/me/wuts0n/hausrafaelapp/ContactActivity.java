@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -73,14 +74,12 @@ public class ContactActivity extends NavigateUpActivity {
             mChildEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    ContactObject entry = dataSnapshot.getValue(ContactObject.class);
-                    setContent(entry);
+                    updateContact(dataSnapshot);
                 }
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    ContactObject entry = dataSnapshot.getValue(ContactObject.class);
-                    setContent(entry);
+                    updateContact(dataSnapshot);
                 }
 
                 @Override
@@ -93,10 +92,19 @@ public class ContactActivity extends NavigateUpActivity {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Log.wtf("DatabaseError", databaseError.toString());
+                    Log.w("DatabaseError", databaseError.toString());
                 }
             };
             mDatabaseReference.addChildEventListener(mChildEventListener);
+        }
+    }
+
+    private void updateContact(DataSnapshot dataSnapshot) {
+        try {
+            ContactObject entry = dataSnapshot.getValue(ContactObject.class);
+            setContent(entry);
+        } catch (DatabaseException e) {
+            e.printStackTrace();
         }
     }
 

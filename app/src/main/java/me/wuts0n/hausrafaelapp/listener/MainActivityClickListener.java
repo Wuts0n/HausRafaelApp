@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -72,36 +73,17 @@ public class MainActivityClickListener implements View.OnClickListener {
 
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    SimpleLinkObject entry = dataSnapshot.getValue(SimpleLinkObject.class);
-                    String key = dataSnapshot.getKey();
-                    String url = (entry != null ? entry.getUrl() : null);
-                    if (key.equals("bus_connection")) {
-                        mBusConnectionUrl = url;
-                    } else if (key.equals("maps")) {
-                        mMapsUrl = url;
-                    }
+                    updateLink(dataSnapshot);
                 }
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    SimpleLinkObject entry = dataSnapshot.getValue(SimpleLinkObject.class);
-                    String key = dataSnapshot.getKey();
-                    String url = (entry != null ? entry.getUrl() : null);
-                    if (key.equals("bus_connection")) {
-                        mBusConnectionUrl = url;
-                    } else if (key.equals("maps")) {
-                        mMapsUrl = url;
-                    }
+                    updateLink(dataSnapshot);
                 }
 
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    String key = dataSnapshot.getKey();
-                    if (key.equals("bus_connection")) {
-                        mBusConnectionUrl = null;
-                    } else if (key.equals("maps")) {
-                        mMapsUrl = null;
-                    }
+                    deleteLink(dataSnapshot);
                 }
 
                 @Override
@@ -114,6 +96,30 @@ public class MainActivityClickListener implements View.OnClickListener {
                 }
             };
             mDatabaseReference.addChildEventListener(mChildEventListener);
+        }
+    }
+
+    private void updateLink(DataSnapshot dataSnapshot) {
+        try {
+            SimpleLinkObject entry = dataSnapshot.getValue(SimpleLinkObject.class);
+            String key = dataSnapshot.getKey();
+            String url = (entry != null ? entry.getUrl() : null);
+            if (key.equals("bus_connection")) {
+                mBusConnectionUrl = url;
+            } else if (key.equals("maps")) {
+                mMapsUrl = url;
+            }
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteLink(DataSnapshot dataSnapshot) {
+        String key = dataSnapshot.getKey();
+        if (key.equals("bus_connection")) {
+            mBusConnectionUrl = null;
+        } else if (key.equals("maps")) {
+            mMapsUrl = null;
         }
     }
 }

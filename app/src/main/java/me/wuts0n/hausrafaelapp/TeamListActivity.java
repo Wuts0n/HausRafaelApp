@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -63,32 +64,18 @@ public class TeamListActivity extends NavigateUpActivity {
 
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    String key = dataSnapshot.getKey();
-                    TeamMemberObject entry = dataSnapshot.getValue(TeamMemberObject.class);
-                    if (entry != null) {
-                        entry.setName(key.replace(" ", ". "));
-                        mEntries.put(key, entry);
-                        setContent();
-                    }
+                    updateChild(dataSnapshot);
                     mProgressBar.setVisibility(View.INVISIBLE);
                 }
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    String key = dataSnapshot.getKey();
-                    TeamMemberObject entry = dataSnapshot.getValue(TeamMemberObject.class);
-                    if (entry != null) {
-                        entry.setName(key);
-                        mEntries.put(key, entry);
-                        setContent();
-                    }
+                    updateChild(dataSnapshot);
                 }
 
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    String key = dataSnapshot.getKey();
-                    mEntries.remove(key);
-                    setContent();
+                    deleteChild(dataSnapshot);
                 }
 
                 @Override
@@ -97,11 +84,31 @@ public class TeamListActivity extends NavigateUpActivity {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Log.wtf("DatabaseError", databaseError.toString());
+                    Log.w("DatabaseError", databaseError.toString());
                 }
             };
             mDatabaseReference.addChildEventListener(mChildEventListener);
         }
+    }
+
+    private void updateChild(DataSnapshot dataSnapshot) {
+        String key = dataSnapshot.getKey();
+        try {
+            TeamMemberObject entry = dataSnapshot.getValue(TeamMemberObject.class);
+            if (entry != null) {
+                entry.setName(key.replace(" ", ". "));
+                mEntries.put(key, entry);
+                setContent();
+            }
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteChild(DataSnapshot dataSnapshot) {
+        String key = dataSnapshot.getKey();
+        mEntries.remove(key);
+        setContent();
     }
 
     private void setContent() {

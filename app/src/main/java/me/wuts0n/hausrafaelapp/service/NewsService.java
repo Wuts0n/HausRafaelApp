@@ -3,7 +3,6 @@ package me.wuts0n.hausrafaelapp.service;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.IBinder;
@@ -15,6 +14,7 @@ import android.util.Log;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -78,35 +78,21 @@ public class NewsService extends Service {
 
     private void attachFirebaseReadListener() {
         if (mChildEventListener == null) {
-            final Context context = this;
             mChildEventListener = new ChildEventListener() {
 
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    String key = dataSnapshot.getKey();
-                    NewsObject entry = dataSnapshot.getValue(NewsObject.class);
-                    if (entry != null && !(mNewsTable.existsRow(key))) {
-                        insertSQLiteRow(key, entry.getText(), entry.getSeverity());
-                        createNotification(entry, mNewsTable.getID(key));
-                    }
+                    addChild(dataSnapshot);
                 }
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    String key = dataSnapshot.getKey();
-                    NewsObject entry = dataSnapshot.getValue(NewsObject.class);
-                    if (entry != null) {
-                        updateSQLiteRow(key, entry.getText(), entry.getSeverity());
-                        createNotification(entry, mNewsTable.getID(key));
-                    }
+                    updateChild(dataSnapshot);
                 }
 
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    String key = dataSnapshot.getKey();
-                    int id = mNewsTable.getID(key);
-                    mNewsTable.deleteRow(key);
-                    NotificationManagerCompat.from(context).cancel(id);
+                    deleteChild(dataSnapshot);
                 }
 
                 @Override
@@ -115,10 +101,23 @@ public class NewsService extends Service {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Log.wtf(TAG, "FirebaseDatabaseError: " + databaseError.toString());
+                    Log.w(TAG, "FirebaseDatabaseError: " + databaseError.toString());
                 }
             };
             mDatabaseReference.addChildEventListener(mChildEventListener);
+        }
+    }
+
+    private void addChild(DataSnapshot dataSnapshot) {
+        String key = dataSnapshot.getKey();
+        try {
+            NewsObject entry = dataSnapshot.getValue(NewsObject.class);
+            if (entry != null && !(mNewsTable.existsRow(key))) {
+                insertSQLiteRow(key, entry.getText(), entry.getSeverity());
+                createNotification(entry, mNewsTable.getID(key));
+            }
+        } catch (DatabaseException e) {
+            e.printStackTrace();
         }
     }
 
@@ -126,8 +125,28 @@ public class NewsService extends Service {
         mNewsTable.insertRow(key, text, severity);
     }
 
+    private void updateChild(DataSnapshot dataSnapshot) {
+        String key = dataSnapshot.getKey();
+        try {
+            NewsObject entry = dataSnapshot.getValue(NewsObject.class);
+            if (entry != null) {
+                updateSQLiteRow(key, entry.getText(), entry.getSeverity());
+                createNotification(entry, mNewsTable.getID(key));
+            }
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void updateSQLiteRow(CharSequence key, CharSequence text, int severity) {
         mNewsTable.updateRow(key, text, severity);
+    }
+
+    private void deleteChild(DataSnapshot dataSnapshot) {
+        String key = dataSnapshot.getKey();
+        int id = mNewsTable.getID(key);
+        mNewsTable.deleteRow(key);
+        NotificationManagerCompat.from(this).cancel(id);
     }
 
     private void createNotification(NewsObject entry, int id) {

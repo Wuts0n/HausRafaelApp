@@ -128,22 +128,12 @@ public class TeamMemberActivity extends NavigateUpActivity {
 
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    String key = dataSnapshot.getKey().replace(" ", ". ");
-                    TeamMemberObject entry = dataSnapshot.getValue(TeamMemberObject.class);
-                    if (entry != null && mKey.equals(key)) {
-                        entry.setName(key);
-                        setContent(entry);
-                    }
+                    updateChild(dataSnapshot);
                 }
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    String key = dataSnapshot.getKey().replace(" ", ". ");
-                    TeamMemberObject entry = dataSnapshot.getValue(TeamMemberObject.class);
-                    if (entry != null && mKey.equals(key)) {
-                        entry.setName(key);
-                        setContent(entry);
-                    }
+                    updateChild(dataSnapshot);
                 }
 
                 @Override
@@ -156,10 +146,19 @@ public class TeamMemberActivity extends NavigateUpActivity {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Log.wtf("DatabaseError", databaseError.toString());
+                    Log.w("DatabaseError", databaseError.toString());
                 }
             };
             mDatabaseReference.addChildEventListener(mChildEventListener);
+        }
+    }
+
+    private void updateChild(DataSnapshot dataSnapshot) {
+        String key = dataSnapshot.getKey().replace(" ", ". ");
+        TeamMemberObject entry = dataSnapshot.getValue(TeamMemberObject.class);
+        if (entry != null && mKey.equals(key)) {
+            entry.setName(key);
+            setContent(entry);
         }
     }
 
