@@ -12,17 +12,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Date;
+import java.util.Set;
+
 import me.wuts0n.hausrafaelapp.NewsActivity.Severity;
 import me.wuts0n.hausrafaelapp.R;
 import me.wuts0n.hausrafaelapp.database.NewsTable;
 import me.wuts0n.hausrafaelapp.listener.NewsMessageBoxClickListener;
-import me.wuts0n.hausrafaelapp.utils.LocalDateUtils;
+import me.wuts0n.hausrafaelapp.utils.WDateUtils;
 
 public class NewsActivityAdapter extends SQLiteDatabaseAdapter {
 
+    private final Set<String> mKeys;
 
-    public NewsActivityAdapter(@NonNull AppCompatActivity activity, Cursor cursor) {
+
+    public NewsActivityAdapter(@NonNull AppCompatActivity activity,
+                               Cursor cursor,
+                               Set<String> keys) {
         super(activity, cursor);
+        mKeys = keys;
     }
 
 
@@ -37,22 +45,30 @@ public class NewsActivityAdapter extends SQLiteDatabaseAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         NewsActivityAdapterViewHolder thisHolder = (NewsActivityAdapterViewHolder) holder;
         mCursor.moveToPosition(position);
-
-        String text = mCursor.getString(mCursor.getColumnIndex(NewsTable.COLUMN_TEXT));
-        int severity = mCursor.getInt(mCursor.getColumnIndex(NewsTable.COLUMN_SEVERITY));
-        if (Severity.Info.getValue() == severity) {
-            setCompoundDrawable(thisHolder.messageView, R.drawable.ic_news_info);
-        } else if (Severity.Attention.getValue() == severity) {
-            setCompoundDrawable(thisHolder.messageView, R.drawable.ic_news_attention);
-        } else if (Severity.Warning.getValue() == severity) {
-            setCompoundDrawable(thisHolder.messageView, R.drawable.ic_news_warning);
-        }
-        thisHolder.messageView.setText(text);
+        String key = mCursor.getString(mCursor.getColumnIndex(NewsTable.COLUMN_KEY));
         String timestamp = mCursor.getString(mCursor.getColumnIndex(NewsTable.COLUMN_DATE));
-        timestamp = LocalDateUtils.getLocalFormatDateString(timestamp);
-        if (timestamp != null) {
-            thisHolder.dateView.setText(
-                    mActivity.getString(R.string.recieved).concat(": ").concat(timestamp));
+        Date date = WDateUtils.getDateFromTimestamp(timestamp);
+        // one week == 604800000 milliseconds
+        long millis = 604800000;
+        if (mKeys.contains(key) && WDateUtils.isDateWithin(date, millis)) {
+            thisHolder.constraintLayout.setMaxHeight(1337);
+            String text = mCursor.getString(mCursor.getColumnIndex(NewsTable.COLUMN_TEXT));
+            int severity = mCursor.getInt(mCursor.getColumnIndex(NewsTable.COLUMN_SEVERITY));
+            if (Severity.Info.getValue() == severity) {
+                setCompoundDrawable(thisHolder.messageView, R.drawable.ic_news_info);
+            } else if (Severity.Attention.getValue() == severity) {
+                setCompoundDrawable(thisHolder.messageView, R.drawable.ic_news_attention);
+            } else if (Severity.Warning.getValue() == severity) {
+                setCompoundDrawable(thisHolder.messageView, R.drawable.ic_news_warning);
+            }
+            thisHolder.messageView.setText(text);
+            timestamp = WDateUtils.getLocalFormatDateString(date);
+            if (timestamp != null) {
+                thisHolder.dateView.setText(
+                        mActivity.getString(R.string.received).concat(": ").concat(timestamp));
+            }
+        } else {
+            thisHolder.constraintLayout.setMaxHeight(0);
         }
     }
 

@@ -1,10 +1,10 @@
 package me.wuts0n.hausrafaelapp;
 
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.ChildEventListener;
@@ -13,15 +13,21 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import me.wuts0n.hausrafaelapp.databinding.ActivityContactBinding;
 import me.wuts0n.hausrafaelapp.firebase.object.ContactObject;
 import me.wuts0n.hausrafaelapp.listener.ContactClickListener;
 import me.wuts0n.hausrafaelapp.utils.UriUtils;
 
 public class ContactActivity extends NavigateUpActivity {
 
-    private ActivityContactBinding mBinding;
-    private FirebaseDatabase mFirebaseDatabase;
+    private View mProgressBar;
+    private TextView mTvContactLocation;
+    private TextView mTvContactPhone;
+    private TextView mTvContactFax;
+    private TextView mTvContactEmail;
+    private TextView mTvContactInternet;
+    private TextView mTvContactHeading;
+    private ImageView mIvPicture;
+
     private DatabaseReference mDatabaseReference;
     private ChildEventListener mChildEventListener;
     private ContactObject lastChanged;
@@ -32,23 +38,26 @@ public class ContactActivity extends NavigateUpActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
 
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_contact);
-
-        if (mBinding.tvContactHeading.getText().toString().isEmpty()) {
-            mBinding.progressBar.setVisibility(View.VISIBLE);
-        }
-
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = mFirebaseDatabase.getReference().child("contact");
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        mDatabaseReference = firebaseDatabase.getReference().child("contact");
         attachDatabaseReadListener();
 
-        ContactClickListener listener = new ContactClickListener(this, mBinding);
+        ContactClickListener listener = new ContactClickListener(this);
 
-        mBinding.tvContactLocation.setOnClickListener(listener);
-        mBinding.tvContactPhone.setOnClickListener(listener);
-        mBinding.tvContactFax.setOnClickListener(listener);
-        mBinding.tvContactEmail.setOnClickListener(listener);
-        mBinding.tvContactInternet.setOnClickListener(listener);
+        mProgressBar = findViewById(R.id.progressBar);
+        mTvContactLocation = (TextView) findViewById(R.id.tv_contact_location);
+        mTvContactPhone = (TextView) findViewById(R.id.tv_contact_phone);
+        mTvContactFax = (TextView) findViewById(R.id.tv_contact_fax);
+        mTvContactEmail = (TextView) findViewById(R.id.tv_contact_email);
+        mTvContactInternet = (TextView) findViewById(R.id.tv_contact_internet);
+        mTvContactHeading = (TextView) findViewById(R.id.tv_contact_heading);
+        mIvPicture = (ImageView) findViewById(R.id.iv_contact_picture);
+
+        mTvContactLocation.setOnClickListener(listener);
+        mTvContactPhone.setOnClickListener(listener);
+        mTvContactFax.setOnClickListener(listener);
+        mTvContactEmail.setOnClickListener(listener);
+        mTvContactInternet.setOnClickListener(listener);
     }
 
     @Override
@@ -94,17 +103,16 @@ public class ContactActivity extends NavigateUpActivity {
     private void setContent(ContactObject entry) {
         lastChanged = entry;
         if (!this.isDestroyed()) {
-            mBinding.tvContactHeading.setText(entry.getDescription());
-            mBinding.tvContactLocation.setText(entry.getLocation().replaceAll("[,;] ", ",\n"));
-            mBinding.tvContactPhone.setText(entry.getPhone());
-            mBinding.tvContactFax.setText(entry.getFax());
-            mBinding.tvContactEmail.setText(entry.getEmail());
+            mTvContactHeading.setText(entry.getDescription());
+            mTvContactLocation.setText(entry.getLocation().replaceAll("[,;] ", ",\n"));
+            mTvContactPhone.setText(entry.getPhone());
+            mTvContactFax.setText(entry.getFax());
+            mTvContactEmail.setText(entry.getEmail());
             String url = entry.getWebsite().trim();
-            mBinding.tvContactInternet.setContentDescription(url);
-            mBinding.tvContactInternet.setText(UriUtils.getAuthority(url));
-            ImageView ivPicture = mBinding.ivPicture;
-            Glide.with(ivPicture.getContext()).load(entry.getPicture()).into(ivPicture);
+            mTvContactInternet.setContentDescription(url);
+            mTvContactInternet.setText(UriUtils.getAuthority(url));
+            Glide.with(mIvPicture.getContext()).load(entry.getPicture()).into(mIvPicture);
         }
-        mBinding.progressBar.setVisibility(View.INVISIBLE);
+        mProgressBar.setVisibility(View.INVISIBLE);
     }
 }

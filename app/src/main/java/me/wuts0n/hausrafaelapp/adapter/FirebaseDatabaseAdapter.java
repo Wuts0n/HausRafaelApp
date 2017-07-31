@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 
 public abstract class FirebaseDatabaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    protected Activity mActivity;
+    protected final Activity mActivity;
     protected Object[] mEntries;
 
 

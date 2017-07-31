@@ -16,7 +16,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -40,7 +42,6 @@ public class TeamMemberActivity extends NavigateUpActivity {
 
     private ActivityTeamMemberBinding mBinding;
     private TeamMemberClickListener mClickListener;
-    private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     private ChildEventListener mChildEventListener;
     private String mKey;
@@ -58,8 +59,8 @@ public class TeamMemberActivity extends NavigateUpActivity {
         Intent intent = getIntent();
         mKey = intent.getStringExtra(TeamListContract.KEY);
 
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = mFirebaseDatabase.getReference().child("team_member");
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        mDatabaseReference = firebaseDatabase.getReference().child("team_member");
         attachDatabaseReadListener();
     }
 
@@ -98,11 +99,11 @@ public class TeamMemberActivity extends NavigateUpActivity {
                 ArrayList<ContentValues> list = new ArrayList<>();
                 ContentValues values = new ContentValues();
                 values.put(Data.MIMETYPE, Photo.CONTENT_ITEM_TYPE);
-                ImageView imageView = mBinding.primaryInfo.ivFace;
+                ImageView imageView = mBinding.primaryInfo.teamMemberImageView.ivFace;
                 Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] imageInByte = baos.toByteArray();
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                byte[] imageInByte = byteArrayOutputStream.toByteArray();
                 values.put(Photo.PHOTO, imageInByte);
                 list.add(values);
                 intent.putExtra(Insert.DATA, list);
@@ -127,7 +128,7 @@ public class TeamMemberActivity extends NavigateUpActivity {
 
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    String key = dataSnapshot.getKey();
+                    String key = dataSnapshot.getKey().replace(" ", ". ");
                     TeamMemberObject entry = dataSnapshot.getValue(TeamMemberObject.class);
                     if (entry != null && mKey.equals(key)) {
                         entry.setName(key);
@@ -137,7 +138,7 @@ public class TeamMemberActivity extends NavigateUpActivity {
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    String key = dataSnapshot.getKey();
+                    String key = dataSnapshot.getKey().replace(" ", ". ");
                     TeamMemberObject entry = dataSnapshot.getValue(TeamMemberObject.class);
                     if (entry != null && mKey.equals(key)) {
                         entry.setName(key);
@@ -147,12 +148,6 @@ public class TeamMemberActivity extends NavigateUpActivity {
 
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    String key = dataSnapshot.getKey();
-                    TeamMemberObject entry = dataSnapshot.getValue(TeamMemberObject.class);
-                    if (entry != null && mKey.equals(key)) {
-                        entry.setName(key);
-                        setContent(entry);
-                    }
                 }
 
                 @Override
@@ -178,26 +173,39 @@ public class TeamMemberActivity extends NavigateUpActivity {
             String email = obj.getEmail();
             mBinding.primaryInfo.tvName.setText(name);
             mBinding.primaryInfo.tvDescription.setText(description == null ? "" : description);
-            ImageView ivFace = mBinding.primaryInfo.ivFace;
-            Glide.with(ivFace.getContext()).load(obj.getPicture()).asBitmap().into(ivFace);
-            mBinding.primaryInfo.ivFace.setContentDescription(name);
+            ImageView ivFace = mBinding.primaryInfo.teamMemberImageView.ivFace;
+            Glide.with(ivFace.getContext())
+                    .load(obj.getPicture())
+                    .asBitmap()
+                    .placeholder(R.drawable.ic_placeholder_face)
+                    .into(ivFace);
+            mBinding.primaryInfo.teamMemberImageView.ivFace.setContentDescription(name);
+            TextView tvPhone = mBinding.secondaryInfo.tvPhone;
+            TextView tvFax = mBinding.secondaryInfo.tvFax;
+            TextView tvEmail = mBinding.secondaryInfo.tvEmail;
             if (phone != null) {
-                mBinding.secondaryInfo.tvPhone.setText(phone);
-                mBinding.secondaryInfo.tvPhone.setOnClickListener(mClickListener);
+                tvPhone.setText(phone);
+                tvPhone.setOnClickListener(mClickListener);
+                tvPhone.setVisibility(View.VISIBLE);
             } else {
-                mBinding.secondaryInfo.tvPhone.setOnClickListener(null);
+                tvPhone.setOnClickListener(null);
+                tvPhone.setVisibility(View.INVISIBLE);
             }
             if (fax != null) {
-                mBinding.secondaryInfo.tvFax.setText(fax);
-                mBinding.secondaryInfo.tvFax.setOnClickListener(mClickListener);
+                tvFax.setText(fax);
+                tvFax.setOnClickListener(mClickListener);
+                tvFax.setVisibility(View.VISIBLE);
             } else {
-                mBinding.secondaryInfo.tvFax.setOnClickListener(null);
+                tvFax.setOnClickListener(null);
+                tvFax.setVisibility(View.INVISIBLE);
             }
             if (email != null) {
-                mBinding.secondaryInfo.tvEmail.setText(email);
-                mBinding.secondaryInfo.tvEmail.setOnClickListener(mClickListener);
+                tvEmail.setText(email);
+                tvEmail.setOnClickListener(mClickListener);
+                tvEmail.setVisibility(View.VISIBLE);
             } else {
-                mBinding.secondaryInfo.tvEmail.setOnClickListener(null);
+                tvEmail.setOnClickListener(null);
+                tvEmail.setVisibility(View.INVISIBLE);
             }
         }
     }

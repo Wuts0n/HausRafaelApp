@@ -24,8 +24,6 @@ import me.wuts0n.hausrafaelapp.firebase.object.AboutUsObject;
 public class AboutUsActivity extends NavigateUpActivity {
 
     private AboutUsActivityAdapter mAdapter;
-    private RecyclerView mRecyclerView;
-    private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     private ChildEventListener mChildEventListener;
     private Map<String, AboutUsObject> mEntries;
@@ -42,15 +40,11 @@ public class AboutUsActivity extends NavigateUpActivity {
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        if (mAdapter.getItemCount() <= 0) {
-            mProgressBar.setVisibility(View.VISIBLE);
-        }
-
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = mFirebaseDatabase.getReference().child("about_us");
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        mDatabaseReference = firebaseDatabase.getReference().child("about_us");
         attachDatabaseReadListener();
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.rv_about_us);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.rv_about_us);
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);

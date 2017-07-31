@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
@@ -18,9 +18,9 @@
                 tools:context="com.example.pc3.hausrafael.ContactActivity">
 
                 <ImageView
-                    android:id="@+id/iv_picture"
+                    android:id="@+id/iv_contact_picture"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="175dp"
                     android:layout_gravity="center"
                     android:background="@color/colorPrimaryLight"
                     android:maxHeight="300dp"
@@ -87,13 +87,6 @@
             </LinearLayout>
         </ScrollView>
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:visibility="invisible" />
+        <include layout="@layout/progress_bar" />
     </RelativeLayout>
-</layout>
+</merge>

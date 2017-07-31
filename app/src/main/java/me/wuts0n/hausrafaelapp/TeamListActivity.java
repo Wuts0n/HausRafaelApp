@@ -14,6 +14,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,8 +24,6 @@ import me.wuts0n.hausrafaelapp.firebase.object.TeamMemberObject;
 public class TeamListActivity extends NavigateUpActivity {
 
     private TeamListActivityAdapter mAdapter;
-    private RecyclerView mRecyclerView;
-    private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     private Map<String, TeamMemberObject> mEntries;
     private ChildEventListener mChildEventListener;
@@ -40,11 +39,11 @@ public class TeamListActivity extends NavigateUpActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mAdapter = new TeamListActivityAdapter(this, new Object[0]);
 
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = mFirebaseDatabase.getReference().child("team_member");
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        mDatabaseReference = firebaseDatabase.getReference().child("team_member");
         attachDatabaseReadListener();
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.rv_team_list);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.rv_team_list);
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -67,7 +66,7 @@ public class TeamListActivity extends NavigateUpActivity {
                     String key = dataSnapshot.getKey();
                     TeamMemberObject entry = dataSnapshot.getValue(TeamMemberObject.class);
                     if (entry != null) {
-                        entry.setName(key);
+                        entry.setName(key.replace(" ", ". "));
                         mEntries.put(key, entry);
                         setContent();
                     }
@@ -113,7 +112,9 @@ public class TeamListActivity extends NavigateUpActivity {
 
     @NonNull
     private Object[] transformMapToArray(Map<?, ?> map) {
-        return map.values().toArray();
+        Object[] array = map.values().toArray();
+        Arrays.sort(array);
+        return array;
     }
 
 }

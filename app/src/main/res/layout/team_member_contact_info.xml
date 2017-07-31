@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <TextView
             android:id="@+id/tv_phone"
             style="@style/contact_style"
             android:drawableStart="@drawable/ic_phone"
-            tools:text="09131 120882"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent" />
+            tools:text="09131 120882" />
+
         <TextView
             android:id="@+id/tv_fax"
             style="@style/contact_style"
             android:drawableStart="@drawable/ic_fax"
-            tools:text="09131 120881"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_phone"
-            app:layout_constraintLeft_toLeftOf="parent" />
+            tools:text="09131 120881" />
+
         <TextView
             android:id="@+id/tv_email"
             style="@style/contact_style"
             android:drawableStart="@drawable/ic_email"
-            tools:text="lalu@caritas-erlangen.de"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_fax"
-            app:layout_constraintLeft_toLeftOf="parent" />
+            tools:text="lalu@caritas-erlangen.de" />
     </android.support.constraint.ConstraintLayout>
 </layout>

@@ -23,7 +23,7 @@ public abstract class SQLiteDatabaseAdapter extends RecyclerView.Adapter<Recycle
         return mCursor == null ? 0 : mCursor.getCount();
     }
 
-    protected void swapCursor(Cursor newCursor) {
+    public void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
         notifyDataSetChanged();
     }

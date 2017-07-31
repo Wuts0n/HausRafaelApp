@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="app_name">Haus Rafael</string>
+
     <string name="menu_news">News</string>
     <string name="menu_team">Team</string>
     <string name="menu_contact">Contact Information</string>
@@ -12,8 +14,11 @@
     <string name="export_to_calendar">Export as Contact</string>
     <string name="export_unsuccessful">Could not export contact</string>
     <string name="copy_successful">Copied to clipboard</string>
-    <string name="recieved">Recieved</string>
+    <string name="received">Received</string>
+    <string name="service_description">Receives News and creates notifications.</string>
+    <string name="no_internet_connection">No internet connection</string>
 
+    <string name="company">Haus Rafael</string>
     <string name="phone">Phone number</string>
     <string name="fax">Fax number</string>
     <string name="email">E-Mail address</string>

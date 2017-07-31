@@ -55,21 +55,6 @@ public class IntentUtils {
         return new Intent(context, TeamMemberActivity.class);
     }
 
-    /*
-    * BusConnections
-    *
-    * http://live.vgn.de/abfahrten/?dm=de%3A09562%3A3472
-    */
-    public static Intent getBusConnectionsIntent() {
-        Uri uri = new Uri.Builder()
-                .scheme("http")             // ://
-                .authority("live.vgn.de")   // /
-                .appendPath("abfahrten")    // /
-                .appendPath("")             // /
-                .appendQueryParameter(/* ? */"dm", /* = */ "de%3A09562%3A3472")
-                .build();
-        return new Intent(Intent.ACTION_VIEW, uri);
-    }
 
     /*
     * Maps
@@ -79,22 +64,6 @@ public class IntentUtils {
                 .scheme("geo")
                 .authority("0,0")
                 .appendQueryParameter("q", query.toString())
-                .build();
-        return new Intent(Intent.ACTION_VIEW, uri);
-    }
-
-    /*
-    * Opens the custom Haus Rafael Orte map
-    *
-    * https://drive.google.com/open?id=14uXrqL_JiC0Ab-JflKJwfwan22Y&usp=sharing
-    */
-    public static Intent getDefaultMapsIntent() {
-        Uri uri = new Uri.Builder()
-                .scheme("https")
-                .authority("drive.google.com")
-                .appendPath("open")
-                .appendQueryParameter("id", "14uXrqL_JiC0Ab-JflKJwfwan22Y")
-                .appendQueryParameter("usp", "sharing")
                 .build();
         return new Intent(Intent.ACTION_VIEW, uri);
     }
@@ -122,7 +91,6 @@ public class IntentUtils {
             Intent intent = new Intent(Intent.ACTION_SEND);
             String[] recipients = {email};
             intent.putExtra(Intent.EXTRA_EMAIL, recipients);
-            intent.putExtra(Intent.EXTRA_SUBJECT, "Entschuldigung für AT");
             intent.setType("*/*");
             return intent;
         }
@@ -133,7 +101,10 @@ public class IntentUtils {
     * Internet
     */
     public static Intent getInternetIntent(CharSequence url) {
-        Uri uri = Uri.parse(url.toString());
-        return new Intent(Intent.ACTION_DEFAULT, uri);
+        if (url != null) {
+            Uri uri = Uri.parse(url.toString());
+            return new Intent(Intent.ACTION_DEFAULT, uri);
+        }
+        return null;
     }
 }

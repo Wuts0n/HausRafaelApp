@@ -14,7 +14,9 @@
     <string name="export_to_calendar">Als Kontakt exportieren</string>
     <string name="export_unsuccessful">Kontakt konnte nicht exportiert werden</string>
     <string name="copy_successful">Text wurde in die Zwischenablage kopiert</string>
-    <string name="recieved">Empfangen</string>
+    <string name="received">Empfangen</string>
+    <string name="service_description">Empfängt Neuigkeiten und erzeugt Benachrichtigungen.</string>
+    <string name="no_internet_connection">Keine Internetverbindung</string>
 
     <string name="company">Haus Rafael</string>
     <string name="phone">Telefonnummer</string>

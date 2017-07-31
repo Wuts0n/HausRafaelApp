@@ -11,8 +11,8 @@ public class NewsTable implements BaseColumns {
     public static final String COLUMN_TEXT = "text";
     public static final String COLUMN_SEVERITY = "severity";
     public static final String COLUMN_DATE = "date";
-    protected static final String COLUMN_KEY = "key";
-    protected static final String NEWS_TABLE_NAME = "table_news";
+    public static final String COLUMN_KEY = "key";
+    private static final String NEWS_TABLE_NAME = "table_news";
     private static final int DEFAULT_MESSAGE_LIMIT = 42;
     private final SQLiteDatabase mReadableDatabase;
     private final SQLiteDatabase mWritableDatabase;
@@ -93,13 +93,13 @@ public class NewsTable implements BaseColumns {
         values.put(COLUMN_SEVERITY, severity);
         return mWritableDatabase.update(NEWS_TABLE_NAME,
                 values,
-                COLUMN_KEY.concat(" = '").concat(key.toString()).concat("'"),
+                COLUMN_KEY.concat(" = '" + key + "'"),
                 null);
     }
 
     public int deleteRow(CharSequence key) {
         return mWritableDatabase.delete(NEWS_TABLE_NAME,
-                COLUMN_KEY.concat(" = '").concat(key.toString()).concat("'"),
+                COLUMN_KEY.concat(" = '" + key + "'"),
                 null);
     }
 }

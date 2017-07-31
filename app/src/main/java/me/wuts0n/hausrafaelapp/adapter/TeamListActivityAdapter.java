@@ -52,7 +52,8 @@ public class TeamListActivityAdapter extends FirebaseDatabaseAdapter {
 
 
     public static class TeamListContract {
-        public static String KEY = "THISISAKEY";
+        // key for Intent.putExtra, delivered to TeamMemberActivity
+        public static final String KEY = "THIS_IS_A_KEY";
     }
 
 

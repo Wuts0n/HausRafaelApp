@@ -25,24 +25,39 @@ import me.wuts0n.hausrafaelapp.firebase.object.NewsObject;
 import me.wuts0n.hausrafaelapp.utils.IntentUtils;
 
 
-public class NewsIntentService extends Service {
+public class NewsService extends Service {
 
+    private final static String TAG = NewsService.class.getName();
     private final static int NOTIFICATION_ID = 420;
+    private DatabaseHelper mDbHelper;
     private NewsTable mNewsTable;
     private DatabaseReference mDatabaseReference;
     private ChildEventListener mChildEventListener;
 
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        DatabaseHelper dbhelper = new DatabaseHelper(this);
-        SQLiteDatabase readableDatabase = dbhelper.getReadableDatabase();
-        SQLiteDatabase writableDatabase = dbhelper.getWritableDatabase();
-        mNewsTable = new NewsTable(readableDatabase, writableDatabase);
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = firebaseDatabase.getReference().child("news");
+    public void onCreate() {
+        Log.i(TAG, "Starting the news service.");
+        super.onCreate();
+        if (mDbHelper == null) {
+            mDbHelper = new DatabaseHelper(this);
+        }
+        if (mNewsTable == null) {
+            SQLiteDatabase readableDatabase = mDbHelper.getReadableDatabase();
+            SQLiteDatabase writableDatabase = mDbHelper.getWritableDatabase();
+            mNewsTable = new NewsTable(readableDatabase, writableDatabase);
+        }
+        if (mDatabaseReference == null) {
+            FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+            mDatabaseReference = firebaseDatabase.getReference().child("news");
+            mDatabaseReference.keepSynced(true);
+        }
         attachFirebaseReadListener();
-        return START_REDELIVER_INTENT;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_STICKY;
     }
 
     @Nullable
@@ -52,10 +67,13 @@ public class NewsIntentService extends Service {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+        Log.i(TAG, "Stopping the news service.");
         mDatabaseReference.removeEventListener(mChildEventListener);
         mChildEventListener = null;
+        mNewsTable = null;
+        mDbHelper.close();
     }
 
     private void attachFirebaseReadListener() {
@@ -97,7 +115,7 @@ public class NewsIntentService extends Service {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Log.wtf("FirebaseDatabaseError", databaseError.toString());
+                    Log.wtf(TAG, "FirebaseDatabaseError: " + databaseError.toString());
                 }
             };
             mDatabaseReference.addChildEventListener(mChildEventListener);
