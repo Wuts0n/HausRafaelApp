@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(AndroidJUnit4.class)
 public class UriUtilsTest {
     @Test
-    public void getAuthorityTest() {
+    public void getAuthorityTest() throws Exception {
         assertEquals("caritas-erlangen.de",
                 UriUtils.getAuthority("https://caritas-erlangen.de/index.php/de/hilfe-bei-psychischer-erkrankung/uebergangseinrichtung-haus-rafael/"));
         assertEquals("bisafans.de",
