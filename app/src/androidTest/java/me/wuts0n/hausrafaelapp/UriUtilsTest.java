@@ -8,7 +8,6 @@ import me.wuts0n.hausrafaelapp.utils.UriUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertEquals;
 
 
