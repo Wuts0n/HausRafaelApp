@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
@@ -87,11 +88,12 @@ public class TeamMemberActivity extends NavigateUpActivity {
 
                 // add picture to export
                 ImageView imageView = mBinding.primaryInfo.teamMemberImageView.ivFace;
-                if (imageView.getDrawable() != null) {
+                Drawable drawable = imageView.getDrawable();
+                if (drawable != null && drawable instanceof BitmapDrawable) {
                     ArrayList<ContentValues> list = new ArrayList<>();
                     ContentValues values = new ContentValues();
                     values.put(Data.MIMETYPE, Photo.CONTENT_ITEM_TYPE);
-                    Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+                    Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
                     byte[] imageInByte = byteArrayOutputStream.toByteArray();
