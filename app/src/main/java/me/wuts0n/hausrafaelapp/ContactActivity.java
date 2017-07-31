@@ -11,8 +11,6 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import me.wuts0n.hausrafaelapp.firebase.object.ContactObject;
 import me.wuts0n.hausrafaelapp.listener.ContactClickListener;
@@ -29,19 +27,11 @@ public class ContactActivity extends NavigateUpActivity {
     private TextView mTvContactHeading;
     private ImageView mIvPicture;
 
-    private DatabaseReference mDatabaseReference;
-    private ChildEventListener mChildEventListener;
-    private ContactObject lastChanged;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
-
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = firebaseDatabase.getReference().child("contact");
-        attachDatabaseReadListener();
 
         ContactClickListener listener = new ContactClickListener(this);
 
@@ -64,9 +54,8 @@ public class ContactActivity extends NavigateUpActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (lastChanged != null) {
-            setContent(lastChanged);
-        }
+        mDatabaseReference = FirebaseReference.getDatabaseReference().child("contact");
+        attachDatabaseReadListener();
     }
 
     private void attachDatabaseReadListener() {
@@ -109,7 +98,6 @@ public class ContactActivity extends NavigateUpActivity {
     }
 
     private void setContent(ContactObject entry) {
-        lastChanged = entry;
         if (!this.isDestroyed()) {
             mTvContactHeading.setText(entry.getDescription());
             mTvContactLocation.setText(entry.getLocation().replaceAll("[,;] ", ",\n"));

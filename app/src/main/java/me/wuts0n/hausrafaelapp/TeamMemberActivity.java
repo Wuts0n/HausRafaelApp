@@ -25,8 +25,6 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -42,10 +40,7 @@ public class TeamMemberActivity extends NavigateUpActivity {
 
     private ActivityTeamMemberBinding mBinding;
     private TeamMemberClickListener mClickListener;
-    private DatabaseReference mDatabaseReference;
-    private ChildEventListener mChildEventListener;
     private String mKey;
-    private TeamMemberObject lastChanged;
 
 
     @Override
@@ -58,18 +53,13 @@ public class TeamMemberActivity extends NavigateUpActivity {
 
         Intent intent = getIntent();
         mKey = intent.getStringExtra(TeamListContract.KEY);
-
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = firebaseDatabase.getReference().child("team_member");
-        attachDatabaseReadListener();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (lastChanged != null) {
-            setContent(lastChanged);
-        }
+        mDatabaseReference = FirebaseReference.getDatabaseReference().child("team_member");
+        attachDatabaseReadListener();
     }
 
     @Override
@@ -163,7 +153,6 @@ public class TeamMemberActivity extends NavigateUpActivity {
     }
 
     private void setContent(TeamMemberObject obj) {
-        lastChanged = obj;
         if (!this.isDestroyed()) {
             String name = obj.getName();
             String description = obj.getDescription();

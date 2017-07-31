@@ -12,8 +12,6 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -25,9 +23,7 @@ import me.wuts0n.hausrafaelapp.firebase.object.TeamMemberObject;
 public class TeamListActivity extends NavigateUpActivity {
 
     private TeamListActivityAdapter mAdapter;
-    private DatabaseReference mDatabaseReference;
     private Map<String, TeamMemberObject> mEntries;
-    private ChildEventListener mChildEventListener;
     private ProgressBar mProgressBar;
 
 
@@ -40,10 +36,6 @@ public class TeamListActivity extends NavigateUpActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mAdapter = new TeamListActivityAdapter(this, new Object[0]);
 
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = firebaseDatabase.getReference().child("team_member");
-        attachDatabaseReadListener();
-
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.rv_team_list);
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -55,7 +47,8 @@ public class TeamListActivity extends NavigateUpActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setContent();
+        mDatabaseReference = FirebaseReference.getDatabaseReference().child("team_member");
+        attachDatabaseReadListener();
     }
 
     private void attachDatabaseReadListener() {

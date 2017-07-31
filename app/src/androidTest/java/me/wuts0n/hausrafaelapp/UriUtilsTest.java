@@ -8,13 +8,14 @@ import me.wuts0n.hausrafaelapp.utils.UriUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertEquals;
 
 
 @RunWith(AndroidJUnit4.class)
 public class UriUtilsTest {
     @Test
-    public void getAuthorityTest() throws Exception {
+    public void getAuthorityTest() {
         assertEquals("caritas-erlangen.de",
                 UriUtils.getAuthority("https://caritas-erlangen.de/index.php/de/hilfe-bei-psychischer-erkrankung/uebergangseinrichtung-haus-rafael/"));
         assertEquals("bisafans.de",

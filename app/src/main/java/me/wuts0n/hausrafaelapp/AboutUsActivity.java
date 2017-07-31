@@ -12,8 +12,6 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,8 +23,6 @@ import me.wuts0n.hausrafaelapp.firebase.object.AboutUsObject;
 public class AboutUsActivity extends NavigateUpActivity {
 
     private AboutUsActivityAdapter mAdapter;
-    private DatabaseReference mDatabaseReference;
-    private ChildEventListener mChildEventListener;
     private Map<String, AboutUsObject> mEntries;
     private ProgressBar mProgressBar;
 
@@ -41,10 +37,6 @@ public class AboutUsActivity extends NavigateUpActivity {
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = firebaseDatabase.getReference().child("about_us");
-        attachDatabaseReadListener();
-
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.rv_about_us);
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -53,6 +45,12 @@ public class AboutUsActivity extends NavigateUpActivity {
         mRecyclerView.setAdapter(mAdapter);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mDatabaseReference = FirebaseReference.getDatabaseReference().child("about_us");
+        attachDatabaseReadListener();
+    }
 
     private void attachDatabaseReadListener() {
         if (mChildEventListener == null) {

@@ -11,8 +11,6 @@ import android.widget.ProgressBar;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,10 +23,8 @@ public class NewsActivity extends NavigateUpActivity {
 
     private NewsActivityAdapter mAdapter;
     private ProgressBar mProgressBar;
-    private DatabaseReference mDatabaseReference;
     private NewsTable mNewsTable;
     private Set<String> mKeys;
-    private ChildEventListener mChildEventListener;
 
 
     @Override
@@ -40,10 +36,7 @@ public class NewsActivity extends NavigateUpActivity {
         SQLiteDatabase readableDatabase = databaseHelper.getReadableDatabase();
         mNewsTable = new NewsTable(readableDatabase, null);
 
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = firebaseDatabase.getReference().child("news");
         mKeys = new HashSet<>();
-        attachFirebaseReadListener();
 
         mAdapter = new NewsActivityAdapter(this, mNewsTable.selectAll(), mKeys);
 
@@ -56,7 +49,14 @@ public class NewsActivity extends NavigateUpActivity {
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    private void attachFirebaseReadListener() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mDatabaseReference = FirebaseReference.getDatabaseReference().child("news");
+        attachDatabaseReadListener();
+    }
+
+    private void attachDatabaseReadListener() {
         if (mChildEventListener == null) {
             mChildEventListener = new ChildEventListener() {
 

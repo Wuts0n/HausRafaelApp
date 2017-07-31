@@ -16,8 +16,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
+import me.wuts0n.hausrafaelapp.FirebaseReference;
 import me.wuts0n.hausrafaelapp.R;
 import me.wuts0n.hausrafaelapp.database.DatabaseHelper;
 import me.wuts0n.hausrafaelapp.database.NewsTable;
@@ -48,8 +48,7 @@ public class NewsService extends Service {
             mNewsTable = new NewsTable(readableDatabase, writableDatabase);
         }
         if (mDatabaseReference == null) {
-            FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-            mDatabaseReference = firebaseDatabase.getReference().child("news");
+            mDatabaseReference = FirebaseReference.getDatabaseReference().child("news");
             mDatabaseReference.keepSynced(true);
         }
         attachFirebaseReadListener();
@@ -71,6 +70,7 @@ public class NewsService extends Service {
         super.onTaskRemoved(rootIntent);
         Log.i(TAG, "Stopping the news service.");
         mDatabaseReference.removeEventListener(mChildEventListener);
+        mDatabaseReference = null;
         mChildEventListener = null;
         mNewsTable = null;
         mDbHelper.close();

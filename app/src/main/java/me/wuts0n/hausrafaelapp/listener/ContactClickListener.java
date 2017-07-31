@@ -52,7 +52,8 @@ public class ContactClickListener implements View.OnClickListener {
             intent = IntentUtils.getEmailIntent(mTvContactEmail.getText());
         } else if (mTvContactInternet.getId() == viewId) {
             title = mActivity.getString(R.string.url);
-            intent = IntentUtils.getInternetIntent(mTvContactInternet.getContentDescription());
+            intent = IntentUtils
+                    .getInternetIntent(mActivity, mTvContactInternet.getContentDescription());
         }
 
         if (IntentUtils.isIntentValid(mActivity, intent)) {
