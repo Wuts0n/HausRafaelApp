@@ -86,17 +86,19 @@ public class TeamMemberActivity extends NavigateUpActivity {
                 intent.putExtra(Insert.COMPANY, this.getString(R.string.company));
 
                 // add picture to export
-                ArrayList<ContentValues> list = new ArrayList<>();
-                ContentValues values = new ContentValues();
-                values.put(Data.MIMETYPE, Photo.CONTENT_ITEM_TYPE);
                 ImageView imageView = mBinding.primaryInfo.teamMemberImageView.ivFace;
-                Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-                byte[] imageInByte = byteArrayOutputStream.toByteArray();
-                values.put(Photo.PHOTO, imageInByte);
-                list.add(values);
-                intent.putExtra(Insert.DATA, list);
+                if (imageView.getDrawable() != null) {
+                    ArrayList<ContentValues> list = new ArrayList<>();
+                    ContentValues values = new ContentValues();
+                    values.put(Data.MIMETYPE, Photo.CONTENT_ITEM_TYPE);
+                    Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                    byte[] imageInByte = byteArrayOutputStream.toByteArray();
+                    values.put(Photo.PHOTO, imageInByte);
+                    list.add(values);
+                    intent.putExtra(Insert.DATA, list);
+                }
 
                 if (IntentUtils.isIntentValid(this, intent)) {
                     startActivity(intent);
